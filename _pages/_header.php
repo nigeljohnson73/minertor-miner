@@ -47,9 +47,3 @@ startPage();
 		</div>
 		<div class="container-lg">
 			<!-- Ended in the footer -->
-			<?php
-			global $coinbase_privKey;
-			if (strlen($coinbase_privKey) == 0) {
-				echo "<div class='alert alert-danger'> No coinbase keys are setup in config_" . $_SERVER["SERVER_NAME"] . ".php</div>";
-			}
-			?>
