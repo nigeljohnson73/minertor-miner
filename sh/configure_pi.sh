@@ -258,7 +258,7 @@ if [[ -n "$LCD" ]]; then
 	cd /tmp
 	git clone https://github.com/goodtft/LCD-show.git
 	cd LCD-show
-	sudo MHS35-show 270
+	sudo ./MHS35-show 270
 else
 	echo "## Skipping LCD library install" | tee -a $logfile
 fi
