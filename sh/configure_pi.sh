@@ -127,7 +127,7 @@ while [[ $# -gt 0 ]]; do
 		echo "GIT email address: '$2'"
 		shift
 		;;
-	-la)
+	-ld)
 		LCD="YES"
 		echo "LCD Attached"
 		;;
