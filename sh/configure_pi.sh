@@ -234,6 +234,14 @@ sudo rpi-eeprom-config --apply /tmp/boot.conf
 echo "## Install core pacakges" | tee -a $logfile
 sudo apt install -y lsb-release apt-transport-https ca-certificates git python3-dev python3-pip python3-pil automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++ tor screen
 
+if [[ -n "$LCD" ]]; then
+	echo "## Install LCD libraries" | tee -a $logfile
+	cd /tmp
+	git clone https://github.com/goodtft/LCD-show.git
+	cd LCD-show
+	sudo ./MHS35-show 270
+fi
+
 echo "## Disabling IPv6" | tee -a $logfile
 sudo bash -c 'cat > /etc/sysctl.d/disable-ipv6.conf' <<EOF
 net.ipv6.conf.all.disable_ipv6 = 1
@@ -244,6 +252,38 @@ bash -c 'cat >> ~/.bashrc' <<EOF
 source /webroot/minertor-miner/res/bashrc
 EOF
 
+# LCD Driver install stuffs up the rc.local file. Reset it just in case and then do stuff properly.
+sudo bash -c 'cat > /etc/rc.local' <<EOF
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+EOF
+
+if [[ -n "$LCD" ]]; then
+	sudo bash -c 'cat >> /etc/rc.local' <<EOF
+bash -c "sleep 5 && /usr/local/bin/fbcp" &
+exit 0
+EOF
+else
+	sudo bash -c 'cat >> /etc/rc.local' <<EOF
+exit 0
+EOF
+fi
+
 echo "## Install rc.local hooks" | tee -a $logfile
 sudo cat /etc/rc.local | grep -v 'exit 0' | sudo tee /etc/rc.local.tmp >/dev/null
 sudo rm /etc/rc.local
@@ -252,6 +292,7 @@ sudo bash -c 'cat >> /etc/rc.local' <<EOF
 . /webroot/minertor-miner/res/rc.local
 exit 0
 EOF
+sudo chmod 755 /etc/rc.local
 
 echo ""
 echo "####################################################################"
@@ -507,11 +548,3 @@ echo "####################################################################" | te
 
 echo "Press return to complete the setup"
 read x
-
-if [[ -n "$LCD" ]]; then
-	echo "## Install LCD libraries" | tee -a $logfile
-	cd /tmp
-	git clone https://github.com/goodtft/LCD-show.git
-	cd LCD-show
-	sudo ./MHS35-show 270
-fi
