@@ -169,3 +169,50 @@ nav {
 .navbar-nav li.nav-item.active a.nav-link {
 	color: #3b0084;
 }
+
+/********************
+*/
+body.dark {
+	background-color: #333;
+}
+
+.dark .headliner {
+	border-bottom: solid 1px #444;
+}
+
+.dark footer nav.navbar {
+	border-top: solid 1px #444;
+}
+
+.dark .navbar-default {
+	background-color: inherit;
+}
+
+.dark footer.app-footer {
+	background-color: #3b0084 !important;
+}
+
+.dark .navbar-nav li {
+	border-left     : solid 1px #444;
+	border-bottom   : solid 1px #444;
+	background-color: #333;
+}
+
+.dark footer .nav-justified>li>a,
+.dark footer .nav-justified>li.active>a {
+	border-bottom: solid 1px #444 !important;
+}
+
+.dark footer .nav-justified>li>a {
+	color: #71a;
+}
+
+.dark footer .nav-justified>li.active>a {
+	color           : #93c;
+	background-color: #444;
+}
+
+.dark footer .nav-justified>li:hover>a {
+	color           : #c6f;
+	background-color: #666;
+}

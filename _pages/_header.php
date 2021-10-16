@@ -33,7 +33,7 @@ startPage();
 	<title><?php echo getAppTitle() ?></title>
 </head>
 
-<body class="text-center">
+<body class="text-center dark">
 	<div id="snackbar"></div>
 	<div data-consent></div>
 	<div id="page-loading">
