@@ -1,2 +1,4 @@
 # minertor-miner
-THE mining components for the minertor project
+The mining components for the minertor project.
+
+More details coming soon.
