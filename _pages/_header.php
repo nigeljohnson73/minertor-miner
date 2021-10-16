@@ -34,16 +34,16 @@ startPage();
 </head>
 
 <body class="text-center dark">
-	<div id="snackbar"></div>
-	<div data-consent></div>
+	<!-- <div id="snackbar"></div>
+	<div data-consent></div> -->
 	<div id="page-loading">
 		<img src="/gfx/ajax-loader-bar.gif" alt="Page loading" />
 		<p>Please wait while the page loads...</p>
 	</div>
-	<div id="page-loaded" class="d-none">
+	<div id="page-loaded" class="main">
 		<!-- Ended in the footer -->
-		<div class="headliner">
+		<!-- <div class="headliner">
 			<a href="/"><img class="img-responsive d-block d-sm-none" src="/gfx/logo-200.png" alt="small logo" /></a> <a href="/"><img class="img-responsive d-none d-sm-block" src="/gfx/logo-400.png" alt="big logo" /></a>
-		</div>
-		<div class="container-lg">
-			<!-- Ended in the footer -->
+		</div> -->
+		<!-- <div class="container-lg"> -->
+		<!-- Ended in the footer -->

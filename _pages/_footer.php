@@ -1,4 +1,4 @@
-</div>
+<!-- </div> -->
 <!-- Started in the header -->
 <!--
   _____           _
@@ -8,9 +8,8 @@
  |_|  \___/ \___/ \__\___|_|
 
 -->
-<footer class="text-center" data-ng-controller="FooterCtrl">
+<!-- <footer class="text-center" data-ng-controller="FooterCtrl">
 	<nav class="navbar navbar-expand nav-fill navbar-light bg-light">
-		<!-- 		<ul class="navbar-nav mr-auto"> -->
 		<ul class="navbar-nav w-100 nav-justified">
 			<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
 			<li class="nav-item"><a class="nav-link" href="/wiki">Wiki</a></li>
@@ -35,18 +34,12 @@
 		</div>
 	</div>
 
-	<!--
-			<div style="position: fixed; bottom: 10px; left: 20px; font-size: 5pt; color: #ccc;">
- 			<span class="glyphicon glyphicon-signal" data-ng-hide="!online"></span> <span class="glyphicon glyphicon-plane" data-ng-hide="online"></span>
- 		</div> 
- -->
 	<div style="position: fixed; bottom: 10px; left: 20px; font-size: 5pt; color: #ccc;">
 		<span class="size-indicator d-block d-sm-none">XS</span> <span class="size-indicator d-none d-sm-block d-md-none">SM</span> <span class="size-indicator d-none d-md-block d-lg-none">MD</span> <span class="size-indicator d-none d-lg-block d-xl-none">LG</span> <span class="size-indicator d-none d-xxl-none d-xl-block">XL</span>
 		<span class="size-indicator d-none d-xxl-block">XXL</span>
 	</div>
-</footer>
+</footer> -->
 
-<div style="height: 75px;" id="padding_for_recaptcha"></div>
 </div>
 <!-- Started in the header -->
 <script>
