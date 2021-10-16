@@ -40,7 +40,7 @@ startPage();
 		<img src="/gfx/ajax-loader-bar.gif" alt="Page loading" />
 		<p>Please wait while the page loads...</p>
 	</div>
-	<div id="page-loaded" class="main">
+	<div id="page-loaded" class="main d-none">
 		<!-- Ended in the footer -->
 		<!-- <div class="headliner">
 			<a href="/"><img class="img-responsive d-block d-sm-none" src="/gfx/logo-200.png" alt="small logo" /></a> <a href="/"><img class="img-responsive d-none d-sm-block" src="/gfx/logo-400.png" alt="big logo" /></a>

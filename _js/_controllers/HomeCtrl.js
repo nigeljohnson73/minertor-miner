@@ -1,5 +1,6 @@
 app.controller('HomeCtrl', ["$scope", "$timeout", "$interval", "$sce", "apiSvc", function ($scope, $timeout, $interval, $sce, apiSvc) {
 	$scope.server = null;
+	$scope.loading = true;
 
 	$scope.getSummary = function () {
 		logger("HomeCtrl::getSummary() called", "dbg");
@@ -7,6 +8,7 @@ app.controller('HomeCtrl', ["$scope", "$timeout", "$interval", "$sce", "apiSvc",
 			logger("HomeCtrl::getSummary() API returned", "dbg");
 			logger(data, "inf");
 			$scope.server = data.server;
+			$scope.loading = false;
 
 			if (data.success) {
 				logger("HomeCtrl::getSummary() success", "dbg");
@@ -19,12 +21,11 @@ app.controller('HomeCtrl', ["$scope", "$timeout", "$interval", "$sce", "apiSvc",
 			if (data.message.length) {
 				toast(data.message);
 			}
-			//$scope.submitting = false;
 		});
 	};
 
 	// Start the calling, but after a startup grace period
-	$scope.load_user_api_call = $timeout($scope.getSummary, 100);
-	$scope.load_user_api_interval = $interval($scope.getSummary, 10000);
+	$scope.ping_api_call = $timeout($scope.getSummary, 100);
+	$scope.ping_api_interval = $interval($scope.getSummary, 10000);
 
 }]);

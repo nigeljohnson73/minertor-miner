@@ -220,3 +220,217 @@ body.dark {
 	color           : #c6f;
 	background-color: #666;
 }
+
+.data-container {
+	text-align: center;
+}
+
+.data-section {
+	vertical-align  : top;
+	width           : 290px;
+	display         : inline-block;
+	border-radius   : 10px;
+	border          : 1px solid #999;
+	background-color: #f0f0f0;
+	margin          : 0px;
+	padding         : 0px;
+	font            : 400 15px Lato, sans-serif;
+	color           : #999;
+	margin-left     : 5px;
+	margin-right    : 5px;
+	margin-bottom   : 10px;
+}
+
+.data-section .data-row:first-child {
+	padding-top: 0px;
+}
+
+.data-section .data-row:last-child {
+	padding-bottom: 10px;
+}
+
+.data-section .label,
+.data-section .value {
+	vertical-align: top;
+	display       : inline-block;
+	margin        : 0px;
+	padding       : 0px;
+	padding-top   : 5px;
+	padding-bottom: 5px;
+	width         : 130px;
+	font          : 400 15px Lato, sans-serif;
+}
+
+.data-block.node {
+	border       : 1px solid #999;
+	margin       : 10px;
+	border-radius: 5px;
+}
+
+.data-section .label {
+	text-align: right;
+	color     : #000;
+}
+
+.data-section .value {
+	text-align: left;
+}
+
+.data-section .banner {
+	font          : 400 18px Lato, sans-serif;
+	font-weight   : bold;
+	color         : #000;
+	padding-top   : 10px;
+	padding-bottom: 10px;
+	border-radius : 10px;
+	border-bottom : 1px solid #999;
+}
+
+.data-section .banner.image-holder {
+	border-bottom: none;
+}
+
+.server-alarms .banner {
+	margin-bottom: 10px;
+}
+
+.data-section .footer {
+	font: inherit;
+}
+
+.data-section button {
+	padding-top      : 10px;
+	padding-left     : 15px;
+	padding-right    : 15px;
+	padding-bottom   : 5px;
+	margin-top       : 10px;
+	margin-left      : 2px;
+	margin-right     : 2px;
+	/* 	margin-bottom:8px;
+ */
+	border-radius    : 10px;
+	font-size        : 20pt;
+}
+
+.data-section button .selected {
+	color: #090;
+}
+
+.node_OK {
+	background-color: #f0fff0;
+}
+
+.node_DWN {
+	background-color: #fff0f0;
+}
+
+.node_STL {
+	background-color: #963;
+}
+
+.node_FAIL {
+	background-color: #f0f0f0;
+}
+
+.alarm {
+	border       : solid 1px #ccc;
+	border-radius: 5px;
+}
+
+.alarm_NONE {
+	background-color: transparent;
+	color           : transparent;
+}
+
+.alarm_DISABLED {
+	background-color: #999;
+	color           : #999;
+}
+
+.alarm_NEVER {
+	background-color: #9c9;
+	color           : #9c9;
+}
+
+.alarm_NOW {
+	background-color: #c99;
+	color           : #c99;
+}
+
+.alarm_PAST {
+	background-color: #cc9;
+	color           : #cc9;
+}
+
+.vpn_NONE {
+	display: none;
+}
+
+.vpn_DISABLED {
+	color: #777;
+}
+
+.vpn_PAST,
+.vpn_UNEXPECTED {
+	color: #c90;
+}
+
+.vpn_NEVER {
+	color: #090;
+}
+
+.vpn_NOW {
+	color: #900;
+}
+
+.node_DWN .vpn {
+	display: none;
+}
+
+.dark .data-section {
+	background-color: #666;
+}
+
+.dark .node_OK {
+	background-color: #676;
+}
+
+.dark .data-row.node_OK {
+	border-radius: 10px;
+	border       : solid 1px #565;
+}
+
+.dark .node_DWN {
+	background-color: #766;
+}
+
+.dark .data-row.node_DWN {
+	border-radius: 10px;
+	border       : solid 1px #644;
+}
+
+.dark .node_FAIL {
+	background-color: #876;
+}
+
+.dark .data-row.node_FAIL {
+	border-radius: 10px;
+	border       : solid 1px #765;
+}
+
+.dark .node_STL {
+	background-color: #963;
+}
+
+.dark .data-row.node_STL {
+	border-radius: 10px;
+	border       : solid 1px #852;
+}
+
+.dark .data-section button {
+	background-color: #666;
+}
+
+.data-section button .selected {
+	color: #090;
+}
