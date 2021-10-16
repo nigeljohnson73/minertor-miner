@@ -19,22 +19,22 @@ app.service('apiSvc', ["$http", "$timeout", "$interval", function ($http, $timeo
 			//logger("apiSvc._queueTick(): Processing queue item", "dbg");
 			// If we have a call in the queue, start processing the queue
 			apiSvc.queue_processing = true;
-			exec = null;
-			if (call.method == "local") { exec = apiSvc.callLocal; }
-			else if (call.method == "public") { exec = apiSvc.callPublic; }
+			// exec = null;
+			// if (call.method == "local") { exec = apiSvc.callLocal; }
+			// else if (call.method == "public") { exec = apiSvc.callPublic; }
 
-			if (exec) {
-				exec(call.api, call.data, function (data) {
-					// here we have the response from the server, so process it as
-					// expected
-					call.notify(data);
+			//			if (exec) {
+			apiSvc.call(call.api, call.data, function (data) {
+				// here we have the response from the server, so process it as
+				// expected
+				call.notify(data);
 
-					// Give the server a cooldown, then check for the next call
-					$timeout(apiSvc._queueTick, 200);
-				}, call.exludelog);
-			} else {
-				logger("apiSvc._queueTick(): Unknown API method: '" + call.method + "'", "err");
-			}
+				// Give the server a cooldown, then check for the next call
+				$timeout(apiSvc._queueTick, 200);
+			}, call.exludelog);
+			// } else {
+			// 	logger("apiSvc._queueTick(): Unknown API method: '" + call.method + "'", "err");
+			// }
 		} else {
 			//logger("apiSvc._queueTick(): Queue is empty", "dbg");
 			apiSvc.queue_processing = false;
@@ -59,20 +59,8 @@ app.service('apiSvc', ["$http", "$timeout", "$interval", function ($http, $timeo
 	 * not urgent
 	 */
 	apiSvc.queue = function (api, data, notify, excludelog) {
-		apiSvc.queueLocal(api, data, notify, excludelog);
-	};
-	apiSvc.queueLocal = function (api, data, notify, excludelog) {
 		apiSvc._queue.push({
 			method: "local",
-			api: api,
-			data: data,
-			notify: notify,
-			excludelog: excludelog
-		});
-	};
-	apiSvc.queuePublic = function (api, data, notify, excludelog) {
-		apiSvc._queue.push({
-			method: "public",
 			api: api,
 			data: data,
 			notify: notify,
@@ -87,15 +75,6 @@ app.service('apiSvc', ["$http", "$timeout", "$interval", function ($http, $timeo
 	 * the logging process
 	 */
 	apiSvc.call = function (api, data, notify, excludelog) {
-		apiSvc.callLocal(api, data, notify, excludelog);
-	};
-	apiSvc.callLocal = function (api, data, notify, excludelog) {
-		apiSvc._callRaw('/app/' + api, data, notify, excludelog);
-	};
-	apiSvc.callPublic = function (api, data, notify, excludelog) {
-		apiSvc._callRaw('{{API_HOST}}' + api, data, notify, excludelog);
-	};
-	apiSvc._callRaw = function (api, data, notify, excludelog) {
 		// If data is a function, call it to get the data
 		data = (typeof data == "function") ? data() : data;
 

@@ -34,8 +34,8 @@ startPage();
 </head>
 
 <body class="text-center dark">
-	<!-- <div id="snackbar"></div>
-	<div data-consent></div> -->
+	<div id="snackbar"></div>
+	<!-- <div data-consent></div> -->
 	<div id="page-loading">
 		<img src="/gfx/ajax-loader-bar.gif" alt="Page loading" />
 		<p>Please wait while the page loads...</p>
