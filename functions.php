@@ -42,6 +42,11 @@ function getDataNamespace() {
 	return $data_namespace;
 }
 
+function getProjectId() {
+	global $project_id;
+	return $project_id;
+}
+
 function ob_print_r($what) {
 	ob_start();
 	print_r($what);
