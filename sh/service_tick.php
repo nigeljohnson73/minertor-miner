@@ -30,7 +30,7 @@ echo "**************************************************************************
 
 // Do the setup and clear up
 echo "tick(): Performing Housekeeping\n";
-setupTables();
+//setupTables();
 
 $start = microtime(true);
 $end = timestamp2Time(timestampFormat(timestampNow(), "YmdHi") . sprintf("%02d", $last_tick));
