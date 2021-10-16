@@ -942,8 +942,8 @@ if (@$_SERVER["SERVER_NAME"] == "localhost") {
 
 	@file_put_contents(__DIR__ . "/config.json", json_encode($config));
 
-	$config->title .= $local_monika;
-	$smtp_from_name .= $local_monika;
+	$config->title .= @$local_monika;
+	$smtp_from_name .= @$local_monika;
 	$data_namespace = $localdev_namespace;
 } else {
 	$api_CORS_origin = "TBD";

@@ -74,7 +74,7 @@ function getVmStats() {
         $free->$key = $v;
     }
 
-    $vmstat = exec("vmstat 1 2 2> /dev/null");
+    $vmstat = exec("vmstat -a 2> /dev/null");
     // echo "vmstat: '$vmstat'\n";
     $bits = explode(" ", preg_replace('/\s+/', " ", trim($vmstat)));
     // echo "bits: " . ob_print_r ( $bits ) . "\n";
