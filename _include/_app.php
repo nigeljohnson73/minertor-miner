@@ -159,7 +159,7 @@ function storeServerStats() {
     $stats->call_duration = $pt->duration();
     $stats->datetime = timestampNow();
 
-    //setConfig("ServerStats", json_encode($stats));
+    InfoStore::set("ServerStats", json_encode($stats));
     return $stats;
 }
 
