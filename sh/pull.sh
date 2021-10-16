@@ -1,5 +1,5 @@
 #!/bin/sh
 
 cd /webroot/minertor-miner
-git checkout www/config.json
+git checkout config.json
 git pull
