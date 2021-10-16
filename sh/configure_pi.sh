@@ -253,16 +253,6 @@ sudo bash -c 'cat >> /etc/rc.local' <<EOF
 exit 0
 EOF
 
-if [[ -n "$LCD" ]]; then
-	echo "## Install LCD libraries" | tee -a $logfile
-	cd /tmp
-	git clone https://github.com/goodtft/LCD-show.git
-	cd LCD-show
-	sudo ./MHS35-show 270
-else
-	echo "## Skipping LCD library install" | tee -a $logfile
-fi
-
 echo ""
 echo "####################################################################"
 echo ""
@@ -320,11 +310,10 @@ sudo chown -R pi:pi minertor-miner
 cd minertor-miner
 sudo mysql --user=root <res/setup_root.sql
 sudo mysql -uroot -pEarl1er2day <res/setup_db.sql
-cp res/install/config_* www
+cp res/install/config_* .
 
 ## install the composer dependancies
 echo "## Installing composer dependancies" | tee -a $logfile
-cd /webroot/minertor-miner/www
 composer install
 
 ## Install crontab entries to start the services
@@ -505,9 +494,24 @@ echo "" | tee -a $logfile
 echo "We are all done. Thanks for flying with us today and we value your" | tee -a $logfile
 echo "custom as we know you have choices. The next steps for you are:" | tee -a $logfile
 echo "" | tee -a $logfile
-echo " * Reboot this raspberry pi" | tee -a $logfile
+if [[ -n "$LCD" ]]; then
+	echo " * Install LCD libraries and then the device will reboot." | tee -a $logfile
+else
+	echo " * Reboot this raspberry pi" | tee -a $logfile
+fi
 echo " * Optionally, install ExpressVPN (~/setup_vpn.sh)" | tee -a $logfile
 echo " * Optionally, install Access Point (~/setup_wifi.sh)" | tee -a $logfile
 echo " * Optionally, install a desktop (~/setup_desktop.sh)" | tee -a $logfile
 echo "" | tee -a $logfile
 echo "####################################################################" | tee -a $logfile
+
+echo "Press return to complete the setup"
+read x
+
+if [[ -n "$LCD" ]]; then
+	echo "## Install LCD libraries" | tee -a $logfile
+	cd /tmp
+	git clone https://github.com/goodtft/LCD-show.git
+	cd LCD-show
+	sudo ./MHS35-show 270
+fi
