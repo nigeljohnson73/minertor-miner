@@ -216,12 +216,12 @@ body.dark {
 	color     : #333;
 }
 
-/* .panel-display {
+.panel-display {
 	width        : 320px;
 	height       : 480px;
 	border       : solid 1px #666;
 	border-radius: 5px;
-} */
+}
 
 .dark .headliner {
 	border-bottom: solid 1px #444;
