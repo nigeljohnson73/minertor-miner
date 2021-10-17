@@ -68,7 +68,7 @@
 		</div> <!-- big panel -->
 
 		<div class="d-block d-sm-none panel-display">
-			<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="server-tab" data-bs-toggle="tab" data-bs-target="#server" type="button" role="tab" aria-controls="server" aria-selected="true">Server</button>
 				</li>
