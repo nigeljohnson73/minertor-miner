@@ -11,3 +11,5 @@
 
 // Locally debug a little more conversationally
 $log_level = LL_INF;
+
+$local_monika = " (Dev)";

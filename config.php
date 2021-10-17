@@ -33,3 +33,5 @@ define("LL_XDEBUG", 6);
 
 // Fundamentally disable logging in the system - can be overriden in config_[hostname].php;
 $log_level = LL_SYS;
+
+$local_monika = "";

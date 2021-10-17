@@ -8,7 +8,7 @@
  |_|  \___/ \___/ \__\___|_|
 
 -->
-<!-- <footer class="text-center" data-ng-controller="FooterCtrl">
+<footer class="d-none d-sm-block text-center" data-ng-controller="FooterCtrl">
 	<nav class="navbar navbar-expand nav-fill navbar-light bg-light">
 		<ul class="navbar-nav w-100 nav-justified">
 			<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
@@ -38,9 +38,9 @@
 		<span class="size-indicator d-block d-sm-none">XS</span> <span class="size-indicator d-none d-sm-block d-md-none">SM</span> <span class="size-indicator d-none d-md-block d-lg-none">MD</span> <span class="size-indicator d-none d-lg-block d-xl-none">LG</span> <span class="size-indicator d-none d-xxl-none d-xl-block">XL</span>
 		<span class="size-indicator d-none d-xxl-block">XXL</span>
 	</div>
-</footer> -->
+</footer>
 
-</div>
+<!-- </div> -->
 <!-- Started in the header -->
 <script>
 	$(document).ready(function() {
