@@ -130,6 +130,7 @@
 			</div>
 			<p>Small panel filler.</p>
 			<p>Small panel filler.</p>
+			<button type="button" class="btn btn-custom" onclick="location.reload()">Reload</button>
 		</div> <!-- small panel -->
 	</div> <!-- loading -->
 </div> <!-- container -->
