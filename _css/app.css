@@ -264,6 +264,13 @@ body.dark {
 	background-color: #666;
 }
 
+.dark .nav-tabs .nav-item.show .nav-link,
+.dark .nav-tabs .nav-link.active {
+	color           : #5c5c5c;
+	background-color: #222;
+	border-color    : #999;
+}
+
 .data-container {
 	text-align: center;
 }

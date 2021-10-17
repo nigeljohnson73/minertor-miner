@@ -4,8 +4,7 @@
 	<img src="/gfx/ajax-loader-bar.gif" alt="submitting" data-ng-show="loading" />
 	<div data-ng-show="!loading">
 
-		<div class="container-fluid d-none d-sm-block">
-			<h1>Coming soon</h1>
+		<div class="container-fluid d-none d-sm-flex justify-content-evenly flex-wrap">
 			<div class='data-container server-stats' data-ng-show='server'>
 				<div class='data-section server-stats'>
 					<div class='data-row'>
@@ -81,11 +80,12 @@
 			</ul>
 			<div class="tab-content" id="myTabContent">
 				<div class="tab-pane fade show active" id="server" role="tabpanel" aria-labelledby="server-tab">
+					<br />
 					<div class='data-container server-stats' data-ng-show='server'>
 						<div class='data-section server-stats'>
-							<!-- <div class='data-row'>
+							<div class='data-row'>
 								<div class='banner'>Server</div>
-							</div> -->
+							</div>
 							<div class='data-row'>
 								<div class='label'>Temperature:</div>
 								<div class='value' highlight-on-change='{{server.temperature}}'>{{server.temperature | number:2}} {{server.temperature_unit}}</div>
@@ -114,11 +114,12 @@
 					</div>
 				</div>
 				<div class="tab-pane fade" id="alarms" role="tabpanel" aria-labelledby="alarms-tab">
+					<br />
 					<div class='data-container server-alarms' data-ng-show='server'>
 						<div class='data-section'>
-							<!-- <div class='data-row'>
+							<div class='data-row'>
 								<div class='banner'>Alarms</div>
-							</div> -->
+							</div>
 							<div class='data-row'>
 								<div class='label'>VPN:</div>
 								<div class='value alarm alarm_{{server.vpn_alarm}}'>{{server.vpn_alarm}}</div>
@@ -143,6 +144,7 @@
 					</div>
 				</div>
 				<div class="tab-pane fade" id="miners" role="tabpanel" aria-labelledby="miners-tab">
+					<br />
 					<h1>Coming soon</h1>
 					<button type="button" class="btn btn-custom" onclick="location.reload()">Reload</button>
 				</div>
