@@ -12,7 +12,7 @@ if (!function_exists("tick")) {
 ob_start();
 global $logger, $argv;
 $mypid = getMyPid();
-$cmd = "ps -ef | grep " . basename($argv[0]) . " | grep -v grep | grep -v tmp | grep -v vi | tee /tmp/service_tick_pid_list.txt | sort -rk5 | awk '{print $2 , $5}'";
+$cmd = "ps -ef | grep " . basename($argv[0]) . " | grep -v grep | grep -v tmp | grep -v vi | tee /tmp/pids_service_tick.txt | sort -rk5 | awk '{print $2 , $5}'";
 @list($pid, $tm) = @explode(" ", trim(system($cmd)));
 if (strlen($pid) > 0 && $pid != $mypid) {
     logger(LL_ERROR, basename($argv[0]) . " already running since " . $tm . ", exiting");
