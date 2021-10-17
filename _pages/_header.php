@@ -45,5 +45,3 @@ startPage();
 		<div class="headliner d-none d-sm-block">
 			<a href="/"><img class="img-responsive d-block d-sm-none" src="/gfx/logo-200.png" alt="small logo" /></a> <a href="/"><img class="img-responsive d-none d-sm-block" src="/gfx/logo-400.png" alt="big logo" /></a>
 		</div>
-		<!-- <div class="container-fluid"> -->
-		<!-- Ended in the footer -->

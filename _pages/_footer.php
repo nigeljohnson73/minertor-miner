@@ -1,5 +1,3 @@
-<!-- </div> -->
-<!-- Started in the header -->
 <!--
   _____           _
  |  ___|__   ___ | |_ ___ _ __
@@ -47,27 +45,6 @@
 		// Perform syntax highlighting
 		// https://highlightjs.org/
 		hljs.highlightAll();
-
-		// Hide protected images
-		$('.covered').each(function() {
-
-			$(this).append('<cover></cover>');
-			$(this).mousedown(function(e) {
-				if (e.button == 2) {
-					e.preventDefault();
-					return false;
-				}
-				return true;
-			});
-
-			$('img', this).css('display', 'block');
-			$(this).hover(function() {
-				var el = $('cover', this);
-				if (el.length <= 0) {
-					$(this).html('');
-				}
-			});
-		});
 
 		// get current URL path and assign 'active' class
 		var pathname = window.location.pathname;

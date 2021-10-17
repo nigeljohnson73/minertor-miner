@@ -69,34 +69,10 @@ a:hover {
 	padding: 30px 10px;
 }
 
-/* footer.app-footer {
-	background-color: #3b0084 !important;
-	color           : #fff !important;
-} */
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin            : 0;
-}
-
-/*************
- * image protection
- */
-cover {
-	position: absolute;
-	top     : 0;
-	bottom  : 0;
-	left    : 0;
-	right   : 0;
-}
-
-.covered {
-	position: relative;
-}
-
-.covered img {
-	display: none;
 }
 
 strong.indicator {

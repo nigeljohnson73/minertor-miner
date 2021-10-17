@@ -34,4 +34,5 @@ define("LL_XDEBUG", 6);
 // Fundamentally disable logging in the system - can be overriden in config_[hostname].php;
 $log_level = LL_SYS;
 
-$local_monika = "";
+// This allows for a title that discrimiantes it from a producrtion page when on localhost
+$local_monika = " (LH)";
