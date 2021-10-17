@@ -39,7 +39,8 @@ PARAMETERS:
 	-gn <NAME>  Your pretty name for git checking in. Default: "Nigel Johnson"
 	-ge <EMAIL> Your git registered email address. Default: nigel@nigeljohnson.net
 	-gp <PASS>  The Personal Access Token you made on github 
-	-ld         LCD Display attached.
+	-ld         install LCD display drivers
+	-ssd        Boot order: SSD -> SD Card
 	-xa <PASS>  The ExpressVPN activation code
 	-xl <PASS>  The ExpressVPN location for connection. Default: UKLO
 
@@ -74,6 +75,8 @@ DNS_IP="8.8.8.8"
 XVPN_ACT=""
 XVPN_LOC="uklo"
 LCD=""
+BOOT="0xf41"
+BOOT_ORDER="SD Card -> SSD"
 
 # You can now supply no paramters
 #if [ $# -eq 0 ]; then
@@ -131,6 +134,11 @@ while [[ $# -gt 0 ]]; do
 		LCD="YES"
 		echo "LCD Attached"
 		;;
+	-ld)
+		BOOT="0xf14"
+		BOOT_ORDER="SSD -> SD Card"
+		echo "boot order '($BOOT) $BOOT_ORDER'"
+		;;
 	-xa)
 		XVPN_ACT="$2"
 		echo "ExpressVPN activation: '$2'"
@@ -161,23 +169,24 @@ echo "####################################################################" | te
 echo "##" | tee -a $logfile
 echo "## The configuration we will be using today:" | tee -a $logfile
 echo "##" | tee -a $logfile
+echo "##        Boot order : '${BOOT_ORDER}'" | tee -a $logfile
 if [[ -n "$GIT_PAT" ]]; then
 	echo "##  GIT checkin name : '${GIT_USERNAME}'" | tee -a $logfile
 	echo "## GIT email address : '${GIT_USERMAIL}'" | tee -a $logfile
 	echo "##  GIT access token : '${GIT_PAT}'"
 else
-	echo "## GIT will not be configured for updating" | tee -a $logfile
+	echo "##        GIT access : 'READ-ONLY"
 fi
 
-echo "##" | tee -a $logfile
+#echo "##" | tee -a $logfile
 
 if [[ -n "$LCD" ]]; then
-	echo "##       LCD drivers : Installed" | tee -a $logfile
+	echo "##       LCD drivers : 320x480 - Touch enabled" | tee -a $logfile
 else
-	echo "##       LCD drivers : Not installed" | tee -a $logfile
+	echo "##       LCD drivers : Not configured" | tee -a $logfile
 fi
 
-echo "##" | tee -a $logfile
+#echo "##" | tee -a $logfile
 
 if [[ -n "$CLIENT_SSID" && -n "$CLIENT_PASSPHRASE" ]]; then
 	echo "##      WiFi Country : '${CCODE}'" | tee -a $logfile
@@ -188,16 +197,16 @@ if [[ -n "$CLIENT_SSID" && -n "$CLIENT_PASSPHRASE" ]]; then
 	echo "##     AP IP address : '${AP_IP}'" | tee -a $logfile
 	echo "## AP DNS IP address : '${DNS_IP}'" | tee -a $logfile
 else
-	echo "## Local Access Point will not be configured" | tee -a $logfile
+	echo "##      Access Point : Not configured" | tee -a $logfile
 fi
 
-echo "##" | tee -a $logfile
+#echo "##" | tee -a $logfile
 
 if [[ -n "$XVPN_ACT" ]]; then
 	echo "##    VPN activation : '${XVPN_ACT}'"
 	echo "##      VPN location : '${XVPN_LOC}'" | tee -a $logfile
 else
-	echo "## ExpressVPN will not be configured" | tee -a $logfile
+	echo "##       Express VPN : Not configured" | tee -a $logfile
 fi
 
 echo "##" | tee -a $logfile
@@ -226,20 +235,111 @@ cat >/tmp/boot.conf <<EOF
 BOOT_UART=0
 WAKE_ON_GPIO=1
 ENABLE_SELF_UPDATE=1
-BOOT_ORDER=0xf41
+BOOT_ORDER=$BOOT
 EOF
 sudo rpi-eeprom-config --apply /tmp/boot.conf
 
 # Install core packages we need to do the core stuff later
 echo "## Install core pacakges" | tee -a $logfile
-sudo apt install -y lsb-release apt-transport-https ca-certificates git python3-dev python3-pip python3-pil automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++ tor screen
+sudo apt install -y lsb-release apt-transport-https ca-certificates git python3-dev python3-pip python3-pil automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++ tor screen xserver-xorg x11-xserver-utils xinit openbox chromium-browser xserver-xorg-input-evdev
 
 if [[ -n "$LCD" ]]; then
 	echo "## Install LCD libraries" | tee -a $logfile
+	# Mostly taken from https://github.com/jwa-7/goodtft-kiosk
 	cd /tmp
 	git clone https://github.com/goodtft/LCD-show.git
 	cd LCD-show
-	sudo ./MHS35-show 270
+
+	echo "## Updating boot config" | tee -a $logfile
+	# Copy the Overlay across
+	sudo cp ./usr/tft35a-overlay.dtb /boot/overlays/tft35a.dtbo
+
+	# Update the booot file to map the correct font
+	sudo sed -i -e 's/$/ fbcon=map:10 fbcon=font:ProFont6x11/' /boot/cmdline.txt
+
+	# Enable the SPI for the display, i2c for the touch, and UART for something
+	sudo bash -c 'cat >> /boot/config.txt' <<EOF
+dtparam=i2c_arm=on
+dtparam=spi=on
+enable_uart=1
+dtoverlay=tft35a:rotate=0
+EOF
+
+	# Configure the display layout and hooks
+	echo "## Setting up framebuffer driver" | tee -a $logfile
+	sudo bash -c 'cat > /usr/share/X11/xorg.conf.d/99-fbturbo.conf' <<EOF
+Section "Device"
+  Identifier "Allwinner A10/A13/A20 FBDEV"
+  Driver     "fbturbo"
+  Option     "fbdev" "/dev/fb0"
+  Option     "SwapbuffersWait" "true"
+EndSection
+
+Section "InputClass"
+  Identifier   "calibration"
+  MatchProduct "ADS7846 Touchscreen"
+  Driver       "evdev"
+  Option       "Calibration" "3936 227 268 3880"
+  Option       "EmulateThirdButton" "1"
+  Option       "EmulateThirdButtonTimeout" "750"
+  Option       "EmulateThirdButtonMoveThreshold" "30"
+  #Option "InvertY" "true"
+  Option "InvertX" "true"
+EndSection
+
+Section "Device"
+  Identifier "uga"
+  driver     "fbdev"
+  Option     "fbdev" "/dev/fb0"
+  Option     "ShadowFB" "off"
+EndSection
+
+Section "Monitor"
+  Identifier "WSSP"
+EndSection
+
+Section "Screen"
+  Identifier "primary"
+  Device     "uga"
+  Monitor    "WSSP"
+EndSection
+
+Section "ServerLayout"
+  Identifier "default"
+  Screen   0 "primary"
+EndSection
+EOF
+
+	echo "## Setting up bash_profile" | tee -a $logfile
+	# On login, if we are not attached to a terminal, launch the X display system
+	bash -c 'cat > ~/.bash_profile' <<EOF
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+[[ -z "\$DISPLAY" && "\$XDG_VTNR" -eq 1 ]] && startx -- -nocursor
+EOF
+	# When the Xorg display starts, this is called
+	echo "## Setting up openbox autostart" | tee -a $logfile
+	sudo bash -c 'cat >> /etc/xdg/openbox/autostart' <<EOF
+# Set the screen to dim after 60 seconds of idle
+xset +dpms 60 120 180
+# Remove exit errors from the config files that could trigger a warning
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+# Launch the browser
+chromium-browser --noerrdialogs --incognito --touch-events --kiosk http://localhost/
+EOF
+
+	echo "## Setting autologin as pi user" | tee -a $logfile
+	sudo systemctl set-default multi-user.target
+	sudo ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+	sudo bash -c 'cat > /etc/systemd/system/getty\@tty1.service.d/autologin.conf' <<EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
+EOF
+
 fi
 
 echo "## Disabling IPv6" | tee -a $logfile
@@ -251,38 +351,6 @@ echo "## Install bashrc hooks" | tee -a $logfile
 bash -c 'cat >> ~/.bashrc' <<EOF
 source /webroot/minertor-miner/res/bashrc
 EOF
-
-# LCD Driver install stuffs up the rc.local file. Reset it just in case and then do stuff properly.
-sudo bash -c 'cat > /etc/rc.local' <<EOF
-#!/bin/sh -e
-#
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-# Print the IP address
-_IP=$(hostname -I) || true
-if [ "$_IP" ]; then
-  printf "My IP address is %s\n" "$_IP"
-fi
-EOF
-
-if [[ -n "$LCD" ]]; then
-	sudo bash -c 'cat >> /etc/rc.local' <<EOF
-bash -c "sleep 5 && /usr/local/bin/fbcp" &
-exit 0
-EOF
-else
-	sudo bash -c 'cat >> /etc/rc.local' <<EOF
-exit 0
-EOF
-fi
 
 echo "## Install rc.local hooks" | tee -a $logfile
 sudo cat /etc/rc.local | grep -v 'exit 0' | sudo tee /etc/rc.local.tmp >/dev/null
@@ -362,13 +430,8 @@ echo "## Installing service management startup in crontab" | tee -a $logfile
 echo "# minertor-miner Miner configuration" | {
 	cat
 	sudo bash -c 'cat' <<EOF
-#@reboot sleep 60 && screen -S php -L -Logfile /tmp/miner.php.log -dm bash -c "cd /webroot/minertor-miner/miners; php miner.php -w WALLETID -y"
-#@reboot sleep 60 && screen -S python -L -Logfile /tmp/miner.python.log -dm bash -c "cd /webroot/minertor-miner/miners; python3 miner.py -w WALLETID -y"
-
-#* * * * * curl -o /tmp/minertor-miner_tick.log http://localhost:/cron/tick >/dev/null 2>&1
-#* * * * * curl -o /tmp/minertor-miner_minute.log http://localhost/cron/every_minute >/dev/null 2>&1
-#3 * * * * curl -o /tmp/minertor-miner_hour.log http://localhost/cron/every_hour >/dev/null 2>&1
-#9 3 * * * curl -o /tmp/minertor-miner_day.log http://localhost/cron/every_day >/dev/null 2>&1
+1 0 * * * /usr/bin/php /webroot/minertor-miner/sh/service_update.php > /tmp/service_update.txt 2>&1
+* * * * * /usr/bin/php /webroot/minertor-miner/sh/service_tick.php > /tmp/service_tick.txt 2>&1
 EOF
 } | crontab -
 
@@ -426,7 +489,6 @@ server {
         fastcgi_read_timeout 10s;
         include fastcgi_params;
         fastcgi_param  SCRIPT_FILENAME  \$document_root/index.php;
-        #fastcgi_index index.php;
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
     }
 }
@@ -503,30 +565,6 @@ echo "This file does nothing, have a look inside to see what to do"
 EOF
 fi
 
-bash -c 'cat > ~/setup_desktop.sh' <<EOF
-#!/bin/sh
-
-echo "We will install a desktop environment. This will take a while."
-echo ""
-echo "Press return to continue"
-echo ""
-read ok
-
-sudo apt install -y xserver-xorg lightdm chromium-browser raspberrypi-ui-mods
-
-echo ""
-echo "####################################################################"
-echo ""
-echo "You will need to manually sudo raspi-config, then these screens"
-echo ""
-echo " * Interface options -> VNC -> Enable"
-echo " * Display -> Resoultion -> Choose one"
-echo " * System Options -> Boot / Auto login -> Choose one"
-echo ""
-echo "Reboot and you're all good"
-echo ""
-EOF
-
 echo "" | tee -a $logfile
 echo "####################################################################" | tee -a $logfile
 echo "" | tee -a $logfile
@@ -535,16 +573,8 @@ echo "" | tee -a $logfile
 echo "We are all done. Thanks for flying with us today and we value your" | tee -a $logfile
 echo "custom as we know you have choices. The next steps for you are:" | tee -a $logfile
 echo "" | tee -a $logfile
-if [[ -n "$LCD" ]]; then
-	echo " * Install LCD libraries and then the device will reboot." | tee -a $logfile
-else
-	echo " * Reboot this raspberry pi" | tee -a $logfile
-fi
+echo " * Reboot this raspberry pi" | tee -a $logfile
 echo " * Optionally, install ExpressVPN (~/setup_vpn.sh)" | tee -a $logfile
 echo " * Optionally, install Access Point (~/setup_wifi.sh)" | tee -a $logfile
-echo " * Optionally, install a desktop (~/setup_desktop.sh)" | tee -a $logfile
 echo "" | tee -a $logfile
 echo "####################################################################" | tee -a $logfile
-
-echo "Press return to complete the setup"
-read x

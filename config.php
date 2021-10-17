@@ -8,6 +8,8 @@ $app_email = "noreply@bogoff.com";
 // When running in non-localhost, you can force these to false so that you can debug javascript
 $compress_js = true;
 
+$expect_vpn = true;
+
 $db_server = "localhost";
 $db_name = "mtm";
 $db_user = "mtm_user";
