@@ -28,8 +28,37 @@ function bitCompare($str, $in, $now, $prev) {
     return $ret;
 }
 
+function pullChunk($key, $haystack) {
+    $ret = "";
+    $lines = explode("\n", $haystack);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        $arr = array();
+        preg_match('/' + $key + '=(.*)$/', $$line, $arr);
+        if (count($arr)) {
+            return $arr[1];
+        }
+    }
+    return "";
+}
+
 function getVmStats() {
     global $expect_vpn;
+
+    ob_start();
+    passthru("sudo cat /etc/hostapd/hostapd.conf");
+    $ap = ob_get_contents();
+    ob_end_clean();
+
+    ob_start();
+    passthru("sudo cat /etc/wpa_supplicant/wpa_supplicant.conf");
+    $wpa = ob_get_contents();
+    ob_end_clean();
+
+    $ap_ssid = pullChunk("ssid", $ap);
+    $ap_pass = pullChunk("wpa_passphrase", $ap);
+    $wpa_ssid = str_replace("\"", "", pullChunk("ssid", $ap));
+    $wpa_pass = str_replace("\"", "", pullChunk("psk", $ap));
 
     $vpn = exec("/usr/bin/expressvpn status | grep 'Connected to'");
     @list($c, $vpn) = explode("Connected to ", trim($vpn));
@@ -124,6 +153,14 @@ function getVmStats() {
     $freq_gpu = ($freq_gpu != "") ? (@round($freq_gpu / 1000000)) : ("");
 
     $ret = new StdClass();
+    if (strlen($ap_ssid)) {
+        $ret->ap_ssid = $ap_ssid;
+        $ret->ap_pass = $ap_pass;
+    }
+    if (strlen($wpa_ssid)) {
+        $ret->wpa_ssid = $wpa_ssid;
+        $ret->wpa_pass = $wpa_pass;
+    }
     $ret->vpn_connection = strlen($vpn) ? $vpn : ("Not Connected");
     $ret->vpn_expected = $expect_vpn;
     $ret->vpn_alarm = strlen($vpn) ? "NEVER" : ($expect_vpn ? "NOW" : "DISABLED");
