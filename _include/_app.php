@@ -34,7 +34,9 @@ function pullChunk($key, $haystack) {
     foreach ($lines as $line) {
         $line = trim($line);
         $arr = array();
-        preg_match('/' + $key + '=(.*)$/', $$line, $arr);
+        $reg = '/' . $key . '=(.*)$/';
+        //echo "|$reg|:" . trim($line) . "\n";
+        preg_match($reg, $line, $arr);
         if (count($arr)) {
             return $arr[1];
         }
@@ -57,8 +59,8 @@ function getVmStats() {
 
     $ap_ssid = pullChunk("ssid", $ap);
     $ap_pass = pullChunk("wpa_passphrase", $ap);
-    $wpa_ssid = str_replace("\"", "", pullChunk("ssid", $ap));
-    $wpa_pass = str_replace("\"", "", pullChunk("psk", $ap));
+    $wpa_ssid = str_replace("\"", "", pullChunk("ssid", $wpa));
+    $wpa_pass = str_replace("\"", "", pullChunk("psk", $wpa));
 
     $vpn = exec("/usr/bin/expressvpn status | grep 'Connected to'");
     @list($c, $vpn) = explode("Connected to ", trim($vpn));
