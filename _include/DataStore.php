@@ -30,7 +30,8 @@ class DataStore {
 		$this->field_types = array();
 		$this->field_indexes = array();
 		$this->type_map = array();
-		$this->type_map["STRING"] = "VARCHAR(4096)";
+		$this->type_map["KEYSTRING"] = "VARCHAR(1024)";
+		$this->type_map["STRING"] = "VARCHAR(8192)";
 		$this->type_map["INTEGER"] = "BIGINT";
 		// $this->type_map["DATETIME"] = "INTEGER";
 		$this->type_map["FLOAT"] = "REAL";
@@ -64,7 +65,11 @@ class DataStore {
 		} else {
 			logger(LL_DBG, "DataStore::init(): Using MySQL");
 			$sql = "CREATE TABLE IF NOT EXISTS " . $this->kind . " (\n";
-			$sql .= "    " . $this->key_field . " " . $this->type_map[$this->field_types[$this->key_field]] . " NOT NULL,\n";
+			$type = $this->field_types[$this->key_field];
+			if ($type == "STRING") {
+				$type = "KEYSTRING";
+			}
+			$sql .= "    " . $this->key_field . " " . $this->type_map[$type] . " NOT NULL,\n";
 			foreach ($this->non_key_fields as $field) {
 				$sql .= "    " . $field . " " . $this->type_map[$this->field_types[$field]];
 				if ($this->field_indexes[$field] ?? false) {
