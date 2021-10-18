@@ -106,6 +106,30 @@
 				<div class="tab-pane fade show active" id="server" role="tabpanel" aria-labelledby="server-tab">
 					<br />
 					<div class='data-container server-stats' data-ng-show='server'>
+						<div class='data-section server-stats' data-ng-show="server.wpa_ssid || server.ap_ssid">
+							<div class='data-row'>
+								<div class='banner'>Wifi</div>
+							</div>
+							<div class='data-row' data-ng-show="server.wpa_ssid">
+								<div class='label'>Upstream SSID:</div>
+								<div class='value'>{{server.wpa_ssid}}</div>
+							</div>
+							<div class='data-row' data-ng-show="server.wpa_ssid">
+								<div class='label'>Passphrase:</div>
+								<div class='value'>{{server.wpa_pass}}</div>
+							</div>
+							<div class='data-row' data-ng-show="server.ap_ssid">
+								<div class='label'>Access Point SSID:</div>
+								<div class='value'>{{server.ap_ssid}}</div>
+							</div>
+							<div class='data-row' data-ng-show="server.ap_ssid">
+								<div class='label'>Passphrase:</div>
+								<div class='value'>{{server.ap_pass}}</div>
+							</div>
+						</div>
+					</div>
+
+					<div class='data-container server-stats' data-ng-show='server'>
 						<div class='data-section server-stats'>
 							<div class='data-row'>
 								<div class='banner'>Server</div>
@@ -126,10 +150,10 @@
 								<div class='label'>HDD load:</div>
 								<div class='value' highlight-on-change='{{server.cpu_load}}'>{{server.sd_load | number:2}}%</div>
 							</div>
-							<div class='data-row'>
+							<!-- <div class='data-row'>
 								<div class='label'>CPU Frequency:</div>
 								<div class='value' highlight-on-change='{{server.frequency_cpu}}'>{{server.frequency_cpu | number:0}} {{server.frequency_unit}}</div>
-							</div>
+							</div> -->
 							<div class='data-row'>
 								<div class='label'>VPN:</div>
 								<div class='value' highlight-on-change='{{server.vpn_connection}}'>{{server.vpn_connection}}</div>
